@@ -14,6 +14,12 @@ It contains the following features:
 - users can be moved from one jail to another
 - jail command lists can be easily updated
 
+## System requirements
+
+Although the included scripts are very generic, their testing on various systems is still ongoing.
+
+The only absolute minimum requirement is the presence of `/bin/bash`.
+
 ## Installation
 
 You can install this package with the following one-liner:
