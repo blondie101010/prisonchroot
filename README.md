@@ -38,13 +38,16 @@ To get its syntax, you can simply call the main script without any parameters:
     prisonchroot
 
 As shown, the command can either apply to a jail or a user.  The resulting syntax details can be obtained with:
+
     prisonchroot user
 and
+
     prisonchroot jail
 
 ### Example
 
 #### create 2 jails with 2 users each
+
     prisonchroot jail add maxsecurity "ls cp vi bash"
     prisonchroot user add um00001 maxsecurity
     prisonchroot user add um00002 maxsecurity
