@@ -16,8 +16,10 @@ It contains the following features:
 
 ## Installation
 
-Single step installation coming soon.
+You can install this package with the following one-liner:
 
+    pushd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && (cd master; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
+    
 ## Syntax
 
 To get its syntax, you can simply call the main script without any parameters:
@@ -30,8 +32,7 @@ and
 
 ### Example
 
-In this example, we will create 2 jails with 2 users each.
-
+#### create 2 jails with 2 users each
     prisonchroot jail add maxsecurity "ls cp vi bash"
     prisonchroot user add um00001 maxsecurity
     prisonchroot user add um00002 maxsecurity
@@ -41,7 +42,11 @@ In this example, we will create 2 jails with 2 users each.
 
 Note that the jail and user names used are only for illustrative purposes.
 
-    # now if you want to move a user
+#### move a user to a different jail
     prisonchroot user move ul00001 looser maxsecurity
 
 The user will be in the new jail when they open a new session.
+
+#### change allowed commands
+    prisonchroot jail update looser "ls cp vi bash php more cat less dd"
+
