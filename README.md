@@ -22,10 +22,16 @@ The only absolute minimum requirement is the presence of `/bin/bash`.
 
 ## Installation
 
-You can install this package with the following one-liner:
+We provide two alternative installation methods depending on whether you have `wget` or `git` installed.
+
+### Installation with `wget`
 
     pushd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && (cd master; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
-    
+
+### Installation with `git`
+
+    pushd /tmp; git clone https://github.com/blondie101010/prisonchroot && (cd prisonchroot; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
+
 ## Syntax
 
 To get its syntax, you can simply call the main script without any parameters:
@@ -56,3 +62,6 @@ The user will be in the new jail when they open a new session.
 #### change allowed commands
     prisonchroot jail update looser "ls cp vi bash php more cat less dd"
 
+## Status
+
+This project is currently in testing phase.  It is not recommended to use it on production yet, but everyone is encouraged to test it out and send us any issues and suggestions you find.
