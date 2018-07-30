@@ -58,12 +58,30 @@ and
 Note that the jail and user names used are only for illustrative purposes.
 
 #### move a user to a different jail
+
     prisonchroot user move ul00001 looser maxsecurity
 
 The user will be in the new jail when they open a new session.
 
 #### change allowed commands
+
     prisonchroot jail update looser "ls cp vi bash php more cat less dd"
+
+#### delete a jailed user
+
+    prisonchroot user del um00002
+or avoid confirmation with `-f`:
+
+    prisonchroot user del -f um00002
+
+The system user and all their files are removed.
+
+#### delete a jail
+
+    prisonchroot jail del looser
+or avoid confirmation with `-f`:
+
+    prisonchroot jail del -f looser
 
 ## Status
 
