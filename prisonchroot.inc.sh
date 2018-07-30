@@ -55,7 +55,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 		echo "Installing $filename in '$1' jail."
 
-		FILES="$FILES `ldd $filename | awk '{ print $3 }'` $filename"
+		FILES="$FILES `ldd $filename | awk '{ print $3 }' | grep -v '('` $filename"
 		LD_LINUX=`ldd $filename | grep ld-linux | awk '{ print $1 }'`
 	done
 
@@ -147,6 +147,7 @@ jail_del() { # $1:jailName
 	# move users to archive
 	mkdir -p $PRISON_ROOT/archive
 	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/.
+	rmdir $PRISON_ROOT/$1
 
 	warn "Jail removal successful.  Note that the 'Match' conditions in /etc/ssh/sshd_config do not get removed automatically for safety reasons."
 
@@ -164,7 +165,7 @@ jail_update_user() {	# $1:jailName, $2:userName
 		return
 	fi
 
-	cp -alL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share,home} $PRISON_ROOT/$1/$2/.
+	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share,home} $PRISON_ROOT/$1/$2/.
 	
 	jail_dev_user $1 $2 mount
 }
@@ -221,7 +222,7 @@ user_del() {	# $1:userName
 
   	checkRet $? E
 
-	jail_dev_user $1 $jail umount
+	jail_dev_user $jail $1 umount
 
 	rm -rf $PRISON_ROOT/$jail/$1
 }
