@@ -26,7 +26,7 @@ We provide two alternative installation methods depending on whether you have `w
 
 ### Installation with `wget`
 
-    pushd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && (cd master; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
+    pushd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && (cd prisonchroot-master; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
 
 ### Installation with `git`
 
@@ -82,6 +82,8 @@ The system user and all their files are removed.
 or avoid confirmation with `-f`:
 
     prisonchroot jail del -f looser
+
+Users from that jail are moved to the 'archive' jail which is not usable.  Those user accounts are therefore disabled until they are moved to another jail.
 
 ## Status
 
