@@ -1,0 +1,42 @@
+#!/bin/bash
+
+source /etc/prisonchroot.conf
+
+prog=prisonchroot
+
+source /usr/local/lib/prisonchroot.inc.sh
+
+
+start() {
+	echo -en "Starting prisonchroot...\t"
+
+	touch /var/run/prisonchroot.running
+
+	jail_dev_all mount
+
+	echo "OK"
+
+	return 0
+}
+
+stop() {
+	echo -en "Stopping prisonchroot...\t"
+
+	rm /var/run/prisonchroot.running
+
+	jail_dev_all umount
+
+	echo "OK"
+	return 0
+}
+
+case "$1" in
+	start) start;;
+	stop) stop;;
+	retart)
+	stop
+	start
+	;;
+	*)
+	echo "Usage: $0 {start|stop|restart}"
+esac

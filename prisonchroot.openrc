@@ -1,0 +1,35 @@
+#!/sbin/openrc-run
+
+source /etc/prisonchroot.conf
+
+prog=prisonchroot
+
+source /usr/local/lib/prisonchroot.inc.sh
+
+
+depend() {
+	after localmount procfs devfs
+}
+
+start() {
+	ebegin "Starting prisonchroot"
+
+	touch /var/run/prisonchroot.running
+
+	jail_dev_all mount
+
+	eoutdent
+	eend 0
+}
+
+stop() {
+	ebegin "Stopping prisonchroot"
+
+	rm /var/run/prisonchroot.running
+
+	jail_dev_all umount
+
+	eoutdent
+	eend 0
+}
+

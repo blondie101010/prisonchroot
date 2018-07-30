@@ -1,0 +1,11 @@
+[Unit]
+Description=prisonchroot user jail system
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/prisonchroot.inc.sh jail_dev_all mount
+ExecStop=/usr/local/bin/prisonchroot.inc.sh jail_dev_all umount
+
+[Install]
+WantedBy=multi-user.target

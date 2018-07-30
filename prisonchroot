@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# load system environment
+source /etc/profile
+
+source /usr/local/lib/b101010.inc.sh
+source /usr/local/lib/prisonchroot.inc.sh
+
+
+case "$1" in
+	jail)
+		case "$2" in
+			add)
+				if [[ $# != 4 ]]; then
+					error "$0: syntax error, please see:\n`$0 $1`"
+				fi
+
+				jail_add $3 $4
+			;;
+
+			update)
+				if [[ $# < 3 ]]; then
+					error "$0: syntax error, please see:\n`$0 $1`"
+				fi
+
+				jail_update $3 $4
+			;;
+
+			del)
+				if [[ $# < 3 ]]; then
+					error "$0: syntax error, please see:\n`$0 $1`"
+				fi
+
+				if [[ "$3" = "-f" ]]; then
+					jailName="$4"
+				else
+					if [[ $# != 3 ]]; then
+						error "$0: syntax error, please see:\n`$0 $1`"
+					fi
+					
+					echo "Removing a jail causes all its users to get moved to $PRISON_ROOT/archive where they will not be able to log in."
+					confirm
+
+					jailName="$3"
+				fi
+
+				jail_del $jailName
+			;;
+
+			*)
+				echo -e "Usage:\t$0 jail [add|update] <jailName> <allowedCommands>\n\t$0 jail del [-f] <jailName>\n\nwhere\t<allowedCommands> is a quoted space delimited list of commands and is optional on 'update'."
+			;;
+		esac
+	;;
+
+	user)
+		case "$2" in
+			add)
+				if [[ $# != 4 ]]; then
+					error "$0: syntax error, please see:\n`$0 $1`"
+				fi
+
+				user_add $3 $4
+			;;
+
+			move)
+				if [[ $# != 5 ]]; then
+					error "$0: syntax error, please see:\n`$0 $1`"
+				fi
+
+				user_move $3 $4 $5
+			;;
+
+			del)
+				if [[ "$3" = "-f" ]]; then
+					if [[ $# != 4 ]]; then
+						error "$0: syntax error, please see:\n`$0 $1`"
+					fi
+					
+					userName="$4"
+				else
+					if [[ $# != 3 ]]; then
+						error "$0: syntax error, please see:\n`$0 $1`"
+					fi
+					
+					echo "Removing a jailed user deletes all their files.  A safer way to disable a user account is by moving them to the special 'archive' jail."
+					confirm
+
+					userName="$3"
+				fi
+
+				user_del $userName
+			;;
+
+			*)
+				echo -e "Usage:\t$0 user add <userName> <jailName>\n\t$0 user del [-f] <userName>\n\t$0 user move <userName> <oldJail> <newJail>"
+		esac
+	;;
+
+	*)
+		echo -e "Usage:\t$0 {jail|user} <operation> <parameters>\n\nFor more details, refer to:\n\t$0 jail --help\nand\n\t$0 user --help"
+	;;
+esac
+
