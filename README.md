@@ -13,6 +13,8 @@ It contains the following features:
 - create a jailed user in a single easy step
 - users can be moved from one jail to another
 - jail command lists can be easily updated
+- no deamon is used; the startup script is only to do the /dev bind-mount
+- changes are live; no need to close the session
 
 ## System requirements
 
@@ -61,8 +63,6 @@ Note that the jail and user names used are only for illustrative purposes.
 
     prisonchroot user move ul00001 looser maxsecurity
 
-The user will be in the new jail when they open a new session.
-
 #### change allowed commands
 
     prisonchroot jail update looser "ls cp vi bash php more cat less dd"
@@ -83,7 +83,7 @@ or avoid confirmation with `-f`:
 
     prisonchroot jail del -f looser
 
-Users from that jail are moved to the 'archive' jail which is not usable.  Those user accounts are therefore disabled until they are moved to another jail.
+Users from that jail are moved to the 'archive' jail which is only usable for sftp.  Those user accounts are therefore disabled until they are moved to another jail.
 
 ## Status
 
