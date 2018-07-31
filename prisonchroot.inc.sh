@@ -70,7 +70,10 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	# copy terminfo and basic configuration files
 	cp -r /usr/share/terminfo/ $PRISON_ROOT/$1/.template/usr/share/.
-	cp /etc/profile /etc/ld.so.conf $PRISON_ROOT/$1/.template/etc/.
+	cp /etc/ld.so.conf $PRISON_ROOT/$1/.template/etc/.
+
+	echo "HOSTNAME=$PRISON_HOSTNAME" >> $PRISON_ROOT/$1/.template/etc/profile
+	cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
 
 	chmod -R o-w $PRISON_ROOT/$1/.template
@@ -146,7 +149,7 @@ jail_del() { # $1:jailName
 
 	# move users to archive
 	mkdir -p $PRISON_ROOT/archive
-	rm -rf $PRISON_ROOT/$1/*/{dev,etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share}
+	rm -rf $PRISON_ROOT/$1/*/{dev,etc,lib,lib64,usr,proc,bin,share}
 	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/.
 	rmdir $PRISON_ROOT/$1
 
@@ -182,6 +185,9 @@ user_add() {	# $1:userName, $2:jailName
   	checkRet $? E
 
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
+	echo "HOME=/home/$1" > $PRISON_ROOT/$2/$1/home/$1/.bashrc
+	chmod 0755 $PRISON_ROOT/$2/$1/home/$1/.bashrc
+
 	chown $1:$1 $PRISON_ROOT/$2/$1/home/$1
 
 	jail_update_user $2 $1
