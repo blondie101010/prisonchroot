@@ -84,7 +84,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 		echo 'hostname="'$PRISON_HOSTNAME'"' > $PRISON_ROOT/$1/.template/etc/conf.d/hostname
 	else
 		if [[ -f /etc/hostname ]]; then
-			echo $PRISON_HOSTNAME > $PRISON_ROOT/$1/.template
+			echo $PRISON_HOSTNAME > $PRISON_ROOT/$1/.template/etc/hostname
 		fi
 	fi
 
