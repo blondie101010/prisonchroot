@@ -74,6 +74,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	echo "HOSTNAME=$PRISON_HOSTNAME" >> $PRISON_ROOT/$1/.template/etc/profile
 	cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
+
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
 
 	chmod -R o-w $PRISON_ROOT/$1/.template
@@ -170,6 +171,9 @@ jail_update_user() {	# $1:jailName, $2:userName
 	fi
 
 	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
+
+	# force load of .bashrc
+	echo "source /home/$2/.bashrc" >> $PRISON_ROOT/$1/$2/etc/profile
 	
 	jail_dev_user $1 $2 mount
 }
@@ -185,7 +189,7 @@ user_add() {	# $1:userName, $2:jailName
   	checkRet $? E
 
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
-	echo "HOME=/home/$1" > $PRISON_ROOT/$2/$1/home/$1/.bashrc
+	echo "HOME=/home/$1; cd ~; HOME=/home/$1; export PS1='$1@$PRISON_HOSTNAME \w \$ '; if [[ -f /home/$1/.profile ]]; then source /home/$1/.profile; fi" > $PRISON_ROOT/$2/$1/home/$1/.bashrc
 	chmod 0755 $PRISON_ROOT/$2/$1/home/$1/.bashrc
 
 	chown $1:$1 $PRISON_ROOT/$2/$1/home/$1
