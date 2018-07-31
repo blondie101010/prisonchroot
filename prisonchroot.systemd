@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/prisonchroot.inc.sh jail_dev_all mount
-ExecStop=/usr/local/bin/prisonchroot.inc.sh jail_dev_all umount
+ExecStart=/usr/local/lib/prisonchroot.inc.sh jail_dev_all mount
+ExecStop=/usr/local/lib/prisonchroot.inc.sh jail_dev_all umount
 
 [Install]
 WantedBy=multi-user.target

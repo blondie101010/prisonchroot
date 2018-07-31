@@ -79,7 +79,7 @@ type systemctl > /dev/null 2>&1
 if [[ $? == 0 ]]; then
 	saveConf systemd
 
-	cp prisonchroot.systemd /etc/systemd/system/prisonchroot
+	cp prisonchroot.systemd /etc/systemd/system/prisonchroot.service
 	systemctl enable prisonchroot
 	systemctl start prisonchroot
 	exit 0
