@@ -61,11 +61,6 @@ cp prisonchroot.inc.sh b101010.inc.sh $USRLOCAL/lib/.
 chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh $USRLOCAL/lib/b101010.inc.sh
 
 
-# make sure internal sftp is used
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.prisonbak
-sed -ie '/^Subsystem\s*sftp\s/d' /etc/ssh/sshd_config
-echo "Subsystem sftp internal-sftp" >> /etc/ssh/sshd_config
-
 # Detect whether to use rc-service, service, or systemctl to lauch us.
 # Though enable and install options could go in service(), that would facilitate errors.
 type rc-service > /dev/null 2>&1
