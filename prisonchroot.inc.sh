@@ -31,7 +31,7 @@ jail_add() {	# $1:jailName, $2:allowedCommands
 	jail_update	$1
 
 	# add the new rule to /etc/ssh/sshd_config
-	echo -e "\nMatch Group $1\n\tChrootDirectory $PRISON_ROOT/$1/%u\n\tAllowTcpForwarding no\nForceCommand internal-sftp\n" >> /etc/ssh/sshd_config
+	echo -e "\nMatch Group $1\n\tChrootDirectory $PRISON_ROOT/$1/%u\n\tAllowTcpForwarding no\n" >> /etc/ssh/sshd_config
 
 	service restart sshd
 }
