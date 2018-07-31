@@ -89,7 +89,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	fi
 
 	if [[ ! -f /bin/bash ]]; then	# in case /bin/bash points to /usr/bin/bash
-		ln /usr/bin/bash /bin/bash
+		ln $PRISON_ROOT/$1/.template/usr/bin/bash $PRISON_ROOT/$1/.template/bin/bash
 	fi
 
 	# copy locales
