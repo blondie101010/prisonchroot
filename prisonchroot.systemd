@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 Type=oneshot
+RemainAfterExit=true
 ExecStart=/usr/local/lib/prisonchroot.inc.sh jail_dev_all mount
 ExecStop=/usr/local/lib/prisonchroot.inc.sh jail_dev_all umount
 
