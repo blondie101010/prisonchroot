@@ -26,11 +26,11 @@ We provide two alternative installation methods depending on whether you have `w
 
 ### Installation with `wget`
 
-    pushd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && (cd prisonchroot-master; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
+    cd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && cd prisonchroot-master && ./prisonchroot-install.sh && rm -rf /tmp/prisonchroot; cd ~
 
 ### Installation with `git`
 
-    pushd /tmp; git clone https://github.com/blondie101010/prisonchroot && (cd prisonchroot; ./prisonchroot-install.sh && popd && rm -rf /tmp/prisonchroot)
+    cd /tmp; git clone https://github.com/blondie101010/prisonchroot && cd prisonchroot && ./prisonchroot-install.sh && rm -rf /tmp/prisonchroot; cd ~
 
 ## Syntax
 
