@@ -146,6 +146,7 @@ jail_del() { # $1:jailName
 
 	# move users to archive
 	mkdir -p $PRISON_ROOT/archive
+	rm -rf $PRISON_ROOT/$1/*/{dev,etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share}
 	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/.
 	rmdir $PRISON_ROOT/$1
 
@@ -159,13 +160,13 @@ jail_update_user() {	# $1:jailName, $2:userName
 	jail_dev_user $1 $2 umount
 
 	# remove everything in the user's jail except their home directory
-	rm -rf $PRISON_ROOT/$1/$2/{dev,etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
+	rm -rf $PRISON_ROOT/$1/$2/{dev,etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share}
 
 	if [[ "$jailName" = "archive" ]]; then
 		return
 	fi
 
-	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share,home} $PRISON_ROOT/$1/$2/.
+	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
 	
 	jail_dev_user $1 $2 mount
 }
