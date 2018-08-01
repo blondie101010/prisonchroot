@@ -25,7 +25,7 @@ error() {	# $1:errorMessage
 # Prompt for confirmation and abort if the user enters anything other than 'y'.
 confirm() {
 	echo ""
-	read -e -p "Are you sure? [y/N] " -i N yn
+	read -e -p "Are you sure? [y/N] " yn
 
 	case "$yn" in
 		[yY])
