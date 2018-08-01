@@ -88,10 +88,6 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 		fi
 	fi
 
-	if [[ ! -f /bin/bash ]]; then	# in case /bin/bash points to /usr/bin/bash
-		ln $PRISON_ROOT/$1/.template/usr/bin/bash $PRISON_ROOT/$1/.template/bin/bash
-	fi
-
 	# copy locales
 	cp -r /usr/lib/locale/ $PRISON_ROOT/$1/.template/usr/lib/.
 
@@ -175,6 +171,10 @@ jail_update_user() {	# $1:jailName, $2:userName
 	fi
 
 	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
+
+	if [[ ! -f $PRISON_ROOT/$1/$2/bin/bash ]]; then	# in case /bin/bash points to /usr/bin/bash
+		ln $PRISON_ROOT/$1/$2/usr/bin/bash $PRISON_ROOT/$1/$2/bin/bash
+	fi
 
 	# force load of .bashrc
 	echo "source /home/$2/.bashrc" >> $PRISON_ROOT/$1/$2/etc/profile
