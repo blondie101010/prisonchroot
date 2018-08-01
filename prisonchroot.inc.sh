@@ -195,6 +195,8 @@ user_add() {	# $1:userName, $2:jailName
 
   	checkRet $? E
 
+	mkdir $PRISON_ROOT/$2/$1/tmp
+	chmod 1777 $PRISON_ROOT/$2/$1/tmp
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
 	echo "HOME=/home/$1; cd ~; HOME=/home/$1; export PS1='$1@$PRISON_HOSTNAME \w \$ '; if [[ -f /home/$1/.profile ]]; then source /home/$1/.profile; fi" > $PRISON_ROOT/$2/$1/home/$1/.bashrc
 	chmod 0755 $PRISON_ROOT/$2/$1/home/$1/.bashrc
