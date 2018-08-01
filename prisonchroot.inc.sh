@@ -8,7 +8,9 @@ source /usr/local/lib/b101010.inc.sh
 jail_save_commands() {	#$1:jailName, $2-*:space delimited list of commands
 	jailName=$1
 	shift
-	echo $* bash > $PRISON_ROOT/$jailName/.commands
+
+	 # `bash` is needed on all systems and `id` is used in many /etc/profile which we use to deal with basic options and environment, and `clear` is a simple way to throw away initial errors (not more secure but visually cleaner)
+	echo $* bash id clear > $PRISON_ROOT/$jailName/.commands
 }
 
 # Add a new jail.
@@ -72,8 +74,9 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	cp -r /usr/share/terminfo/ $PRISON_ROOT/$1/.template/usr/share/.
 	cp /etc/ld.so.conf $PRISON_ROOT/$1/.template/etc/.
 
-	echo "HOSTNAME=$PRISON_HOSTNAME" >> $PRISON_ROOT/$1/.template/etc/profile
-	cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
+        echo "HOSTNAME=$PRISON_HOSTNAME" > $PRISON_ROOT/$1/.template/etc/profile
+        cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
+        echo "clear" >> $PRISON_ROOT/$1/.template/etc/profile
 
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
 
