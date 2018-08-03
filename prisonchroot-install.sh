@@ -96,13 +96,20 @@ fi
 
 cp prisonchroot.sysv /etc/init.d/prisonchroot
 
-type update-rc.d > /dev/null 2>&1
+type chkconfig > /dev/null 2>&1
 
 if [[ $? == 0 ]]; then
-	update-rc.d prisonchroot defaults
+	chkconfig prisonchroot on
 else
-	ln -s /etc/init.d/prisonchroot /etc/defaults/prisonchroot
+	type update-rc.d > /dev/null 2>&1
+
+	if [[ $? == 0 ]]; then
+		update-rc.d prisonchroot defaults
+	else
+		ln -s /etc/init.d/prisonchroot /etc/defaults/prisonchroot
+	fi
 fi
+
 
 if [[ "$INIT_SYSTEM" = "sysv-service" ]]; then
 	service prisonchroot start
