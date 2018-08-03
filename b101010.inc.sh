@@ -73,7 +73,7 @@ service() {	# $1:operation, $2:unit
 		;;
 
 		"sysv-service")
-			service $2 $1
+			/sbin/service $2 $1
 		;;
 	esac
 }
