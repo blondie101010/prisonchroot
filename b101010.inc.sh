@@ -13,7 +13,6 @@ b101010=1
 # Show a warning.
 warn() {	# $1:message
 	echo -e "\n\e[1;33m$1\e[0m"
-	exit 1
 }
 
 # Output an error message and exit.
@@ -77,4 +76,16 @@ service() {	# $1:operation, $2:unit
 		;;
 	esac
 }
+
+getEnvOrPrompt() {	# $1:varName, $2:prompt, [$3:default]
+	_val=${!1}
+	if [[ "$_val" = "" ]]; then
+		echo ""
+		read -e -p "$2" -i "$3" $1
+	else
+		echo "Using predefined $1=$_val.";
+	fi
+}
+
+
 
