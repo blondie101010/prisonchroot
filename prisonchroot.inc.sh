@@ -23,7 +23,7 @@ jail_add() {	# $1:jailName, $2:allowedCommands
   
   	checkRet $? E
 
-	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
+	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
 
 	chown -R root:root $PRISON_ROOT/$1
 	chmod -R 755 $PRISON_ROOT/$1
@@ -62,7 +62,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	done
 
 	rm -rf $PRISON_ROOT/$1/.template
-	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
+	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
 
 	FILES="$FILES $LD_LINUX"
 	for file in $FILES
@@ -83,6 +83,16 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
         cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
 
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
+
+	# check for custom ulimit configuration
+	if [[ -f /etc/security/limits-$1.conf ]]; then
+		cp /etc/security/limits-$1.conf $PRISON_ROOT/$1/template/etc/security/limits.conf
+	else
+		if [[ -f /etc/security/limits.conf ]]; then
+			# use default ulimit configuration
+			cp /etc/security/limits.conf $PRISON_ROOT/$1/template/etc/security/limits.conf
+		fi
+	fi
 
 	chmod -R o-w $PRISON_ROOT/$1/.template
 
