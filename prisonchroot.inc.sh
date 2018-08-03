@@ -9,8 +9,8 @@ jail_save_commands() {	#$1:jailName, $2-*:space delimited list of commands
 	jailName=$1
 	shift
 
-	 # `bash` is needed on all systems and `id` is used in many /etc/profile which we use to deal with basic options and environment, and `clear` is a simple way to throw away initial errors (not more secure but visually cleaner)
-	echo $* bash id clear > $PRISON_ROOT/$jailName/.commands
+	 # `bash` is needed on all systems and `id` is used in many /etc/profile which we use to deal with basic options and environment
+	echo $* bash id > $PRISON_ROOT/$jailName/.commands
 }
 
 # Add a new jail.
@@ -76,7 +76,6 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
         echo "HOSTNAME=$PRISON_HOSTNAME" > $PRISON_ROOT/$1/.template/etc/profile
         cat /etc/profile >> $PRISON_ROOT/$1/.template/etc/profile
-        echo "clear" >> $PRISON_ROOT/$1/.template/etc/profile
 
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
 
@@ -173,14 +172,21 @@ jail_update_user() {	# $1:jailName, $2:userName
 		return
 	fi
 
-	cp -alfL $PRISON_ROOT/$1/.template/{dev,etc,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
+	cp -alfL $PRISON_ROOT/$1/.template/{dev,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
+
+	# keep etc separate for certain user level customizations like the profile
+	cp -r $PRISON_ROOT/$1/.template/etc $PRISON_ROOT/$1/$2/.
 
 	if [[ ! -f $PRISON_ROOT/$1/$2/bin/bash ]]; then	# in case /bin/bash points to /usr/bin/bash
 		ln $PRISON_ROOT/$1/$2/usr/bin/bash $PRISON_ROOT/$1/$2/bin/bash
 	fi
 
-	# force load of .bashrc
-	echo "source /home/$2/.bashrc" >> $PRISON_ROOT/$1/$2/etc/profile
+	# wrap the whole chroot /etc/profile in an stderr redirect
+	echo "(" > $PRISON_ROOT/$1/$2/etc/profile
+	cat $PRISON_ROOT/$1/.template/etc/profile >> $PRISON_ROOT/$1/$2/etc/profile
+	echo ") 2> /dev/null" >> $PRISON_ROOT/$1/$2/etc/profile
+
+	echo "HOME=/home/$2; cd ~; HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
 	
 	jail_dev_user $1 $2 mount
 }
@@ -195,11 +201,9 @@ user_add() {	# $1:userName, $2:jailName
 
   	checkRet $? E
 
-	mkdir $PRISON_ROOT/$2/$1/tmp
+	mkdir -p $PRISON_ROOT/$2/$1/tmp
 	chmod 1777 $PRISON_ROOT/$2/$1/tmp
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
-	echo "HOME=/home/$1; cd ~; HOME=/home/$1; export PS1='$1@$PRISON_HOSTNAME \w \$ '; if [[ -f /home/$1/.profile ]]; then source /home/$1/.profile; fi" > $PRISON_ROOT/$2/$1/home/$1/.bashrc
-	chmod 0755 $PRISON_ROOT/$2/$1/home/$1/.bashrc
 
 	chown $1:$1 $PRISON_ROOT/$2/$1/home/$1
 
