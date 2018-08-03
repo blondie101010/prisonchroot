@@ -49,8 +49,8 @@ The installation script will not prompt you for acceptable parameters that are p
 
 `prisonchroot` uses only a few configuration files (other than imported system-wide configurations):
 
-    - `/etc/prisonchroot.conf`: defined automatically during the installation
-    - `/etc/security/limits-$jailName.conf`: if such a file exists when the jail (corresponding to $jailName) gets created or updated, this file is copied to the `chroot`ed environment's `/etc/security/limits.conf`
+- `/etc/prisonchroot.conf`: defined automatically during the installation
+- `/etc/security/limits-$jailName.conf`: if such a file exists when the jail (corresponding to $jailName) gets created or updated, this file is copied to the `chroot`ed environment's `/etc/security/limits.conf`
 
 ## Syntax
 
