@@ -72,6 +72,11 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	# copy terminfo and basic configuration files
 	cp -r /usr/share/terminfo/ $PRISON_ROOT/$1/.template/usr/share/.
+
+	if [[ -d /lib/terminfo ]]; then
+		cp -r /lib/terminfo $PRISON_ROOT/$1/.template/lib/.
+	fi
+
 	cp /etc/ld.so.conf $PRISON_ROOT/$1/.template/etc/.
 
         echo "HOSTNAME=$PRISON_HOSTNAME" > $PRISON_ROOT/$1/.template/etc/profile
