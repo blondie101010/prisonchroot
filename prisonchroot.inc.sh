@@ -86,15 +86,13 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	# check for custom ulimit configuration
 	if [[ -f /etc/security/limits-$1.conf ]]; then
-		cp /etc/security/limits-$1.conf $PRISON_ROOT/$1/template/etc/security/limits.conf
+		cp /etc/security/limits-$1.conf $PRISON_ROOT/$1/.template/etc/security/limits.conf
 	else
-		if [[ -f /etc/security/limits.conf ]]; then
+		if [[ -d /etc/security ]]; then
 			# use default ulimit configuration
-			cp /etc/security/limits.conf $PRISON_ROOT/$1/template/etc/security/limits.conf
+			cp -r /etc/security $PRISON_ROOT/$1/.template/etc/.
 		fi
 	fi
-
-	chmod -R o-w $PRISON_ROOT/$1/.template
 
 	# set host name
 	if [[ -f /etc/conf.d/hostname ]]; then
@@ -107,6 +105,9 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	# copy locales
 	cp -r /usr/lib/locale/ $PRISON_ROOT/$1/.template/usr/lib/.
+
+	chown -R root:root $PRISON_ROOT/$1/.template
+	chmod -R o-w $PRISON_ROOT/$1/.template
 
 	# update user jails from .template
 	for user in `ls $PRISON_ROOT/$1`; do
