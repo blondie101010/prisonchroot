@@ -15,8 +15,10 @@ validateRootPath() {	# $1:varName
 	_root=${!1}
 	if [ -d $_root ] || [ -f $_root ] || [ ! -w `dirname $_root` ] || [ ${_root:0:1} != / ]; then
 		# invalid
-		warn "$_root already exists or is not writable."
-		unset $1
+		if [[ "$_root" != "" ]]; then
+			warn "$_root already exists or is not writable."
+			unset $1
+		fi
 		return 0
 	else
 		return 1
