@@ -9,9 +9,14 @@
 # load system environment
 source /etc/profile
 
-function validateRootPath {
-	if [ -d $1 ] || [ -f $1 ] || [ ! -w `dirname $1` ] || [ ${1:0:1} != / ]; then
+source b101010.inc.sh
+
+validateRootPath() {	# $1:varName
+	_root=${!1}
+	if [ -d $_root ] || [ -f $_root ] || [ ! -w `dirname $_root` ] || [ ${_root:0:1} != / ]; then
 		# invalid
+		warn "$_root already exists or is not writable."
+		unset $1
 		return 0
 	else
 		return 1
@@ -31,14 +36,12 @@ echo ""
 echo "You will now be asked a few questions to customize your prison system."
 echo ""
 
-while validateRootPath $PRISON_ROOT; do
-	echo ""
-	read -e -p "Base directory for jails (must not exist): " -i "/prisons" PRISON_ROOT
+while validateRootPath PRISON_ROOT; do
+	getEnvOrPrompt PRISON_ROOT "Base directory for jails (must not exist): " "/prisons"
 done
 
 while [[ "$PRISON_HOSTNAME" = "" ]]; do
-	echo ""
-	read -e -p "Prison host name which is shown to jailed users: " -i "`hostname`" PRISON_HOSTNAME
+	getEnvOrPrompt PRISON_HOSTNAME "Prison host name which is shown to jailed users: " "`hostname`"
 done
 
 
