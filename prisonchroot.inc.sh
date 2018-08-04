@@ -41,7 +41,7 @@ jail_add() {	# $1:jailName, $2:allowedCommands
 	# add the new rule to /etc/ssh/sshd_config
 	echo -e "\nMatch Group $1\n\tChrootDirectory $PRISON_ROOT/$1/%u\n\tAllowTcpForwarding no\n" >> /etc/ssh/sshd_config
 
-	service restart sshd
+	serviceControl restart sshd
 }
 
 # Update a jail and its users' environment.  It is used to update jailed environment after system updates or its initial creation.

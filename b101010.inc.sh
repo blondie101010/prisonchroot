@@ -52,7 +52,7 @@ checkRet() {	# $1:$?, $2:operation ('W'arn/'E'rror)
 
 # Run the system's init service controller.
 # Note that install and remove operations were intentionally left out for now as they might increase the risk of manual errors.
-service() {	# $1:operation, $2:unit
+serviceControl() {	# $1:operation, $2:unit
 	case "$1" in
 		start|stop|restart) ;;# all ok
 		*) error "Invalid service operation ($1).";;
@@ -72,7 +72,7 @@ service() {	# $1:operation, $2:unit
 		;;
 
 		"sysv-service")
-			/sbin/service $2 $1
+			service $2 $1
 		;;
 	esac
 }

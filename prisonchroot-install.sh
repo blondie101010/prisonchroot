@@ -77,7 +77,7 @@ if [[ $? == 0 ]]; then
 	saveConf openrc
 
 	cp prisonchroot.openrc /etc/init.d/prisonchroot
-	service start prisonchroot
+	serviceControl start prisonchroot
 	rc-update add prisonchroot
 	exit 0
 fi
@@ -88,7 +88,7 @@ if [[ $? == 0 ]]; then
 	saveConf systemd
 
 	cp prisonchroot.systemd /etc/systemd/system/prisonchroot.service
-	service start prisonchroot
+	serviceControl start prisonchroot
 	systemctl enable prisonchroot
 	exit 0
 fi
@@ -118,4 +118,4 @@ else
 	fi
 fi
 
-service start prisonchroot
+serviceControl start prisonchroot
