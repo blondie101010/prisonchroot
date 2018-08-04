@@ -145,6 +145,23 @@ jail_dev_user() {	# $1:jailName, $2:username, $3:[mount|umount]
 	umount $PRISON_ROOT/$1/$2/dev/pts 2> /dev/null
 	umount $PRISON_ROOT/$1/$2/dev 2> /dev/null
 
+	mount|grep "$2"
+	if [[ $? = 0 ]]; then
+		# we must kill the session
+		_pid=`lsof $PRISON_ROOT/$1/$2/dev/pts|grep $2|head -1| cut -c9-|cut -d' ' -f1`
+
+		if [[ $PRISONCHROOT_DEBUG = 1 ]]; then
+			echo "killing session with pid: $_pid"
+		fi
+
+		kill -9 $_pid
+
+		# make sure the umount succeeds (recursively)
+		sleep 1
+		jail_dev_user $1 $2 $3
+		return
+	fi
+
 	if [[ "$3" = "mount" ]]; then
 		mount --bind /dev $PRISON_ROOT/$1/$2/dev
 		mount --bind /dev/pts $PRISON_ROOT/$1/$2/dev/pts
@@ -160,6 +177,10 @@ jail_dev() {	# $1:jailName, $2:[mount|umount]
 
 # Delete a jail.  Member users are moved to the 'archive' jail which blocks everything.
 jail_del() { # $1:jailName
+	if [[ "$1" = "archive" ]]; then
+		error "The 'archive' jail can not be deleted."
+	fi
+
 	if [[ ! -d $PRISON_ROOT/$1 ]]; then
 		error "Jail '$1' not found."
 	fi
@@ -168,13 +189,11 @@ jail_del() { # $1:jailName
 
   	checkRet $? E
 
-	jail_dev $1 umount
-
 	rm -rf $PRISON_ROOT/$1/.commands $PRISON_ROOT/$1/.template
 
 	# move users to archive
 	mkdir -p $PRISON_ROOT/archive
-	rm -rf $PRISON_ROOT/$1/*/{dev,etc,lib,lib64,usr,proc,bin,share}
+	rm -rf $PRISON_ROOT/$1/*/{etc,lib,lib64,usr,proc,bin,share}
 	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/.
 	rmdir $PRISON_ROOT/$1
 
@@ -185,16 +204,14 @@ jail_del() { # $1:jailName
 
 # Update a user's jailed environment.
 jail_update_user() {	# $1:jailName, $2:userName
-	jail_dev_user $1 $2 umount
-
-	# remove everything in the user's jail except their home directory
-	rm -rf $PRISON_ROOT/$1/$2/{dev,etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share}
+	# remove everything in the user's jail except their home directory and /dev
+	rm -rf $PRISON_ROOT/$1/$2/{etc/conf.d,lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share}
 
 	if [[ "$jailName" = "archive" ]]; then
 		return
 	fi
 
-	cp -alfL $PRISON_ROOT/$1/.template/{dev,lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
+	cp -alfL $PRISON_ROOT/$1/.template/{lib,lib64,usr,proc,bin,share} $PRISON_ROOT/$1/$2/.
 
 	# keep etc separate for certain user level customizations like the profile
 	cp -r $PRISON_ROOT/$1/.template/etc $PRISON_ROOT/$1/$2/.
@@ -209,8 +226,6 @@ jail_update_user() {	# $1:jailName, $2:userName
 	echo ") 2> /dev/null" >> $PRISON_ROOT/$1/$2/etc/profile
 
 	echo "HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; cd $HOME; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
-	
-	jail_dev_user $1 $2 mount
 }
 
 # Add a jailed system user.
@@ -223,6 +238,9 @@ user_add() {	# $1:userName, $2:jailName
 
   	checkRet $? E
 
+	mkdir -p $PRISON_ROOT/$2/$1/dev
+	chmod 755 $PRISON_ROOT/$2/$1/dev
+	jail_dev_user $1 $2 mount
 	mkdir -p $PRISON_ROOT/$2/$1/tmp
 	chmod 1777 $PRISON_ROOT/$2/$1/tmp
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
