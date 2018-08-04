@@ -29,7 +29,7 @@ jail_add() {	# $1:jailName, $2:allowedCommands
   
   	checkRet $? E
 
-	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
+	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/libexec/openssh,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
 
 	chown -R root:root $PRISON_ROOT/$1
 	chmod -R 755 $PRISON_ROOT/$1
@@ -68,7 +68,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	done
 
 	rm -rf $PRISON_ROOT/$1/.template
-	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
+	mkdir -p $PRISON_ROOT/$1/.template/{dev,etc/conf.d,etc/security,lib,usr/libexec/openssh,usr/lib,lib64,usr/lib64,proc,usr/bin,bin,usr/share,share,home}
 
 	FILES="$FILES $LD_LINUX"
 	for file in $FILES
@@ -208,7 +208,7 @@ jail_update_user() {	# $1:jailName, $2:userName
 	cat $PRISON_ROOT/$1/.template/etc/profile >> $PRISON_ROOT/$1/$2/etc/profile
 	echo ") 2> /dev/null" >> $PRISON_ROOT/$1/$2/etc/profile
 
-	echo "HOME=/home/$2; cd ~; HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
+	echo "HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; cd $HOME; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
 	
 	jail_dev_user $1 $2 mount
 }
