@@ -9,8 +9,14 @@ jail_save_commands() {	#$1:jailName, $2-*:space delimited list of commands
 	jailName=$1
 	shift
 
-	 # `bash` is needed on all systems and `id` is used in many /etc/profile which we use to deal with basic options and environment
-	echo $* bash id > $PRISON_ROOT/$jailName/.commands
+	# `bash` is needed on all systems and `id` is used in many /etc/profile which we use to deal with basic options and environment
+	FORCED_COMMANDS="bash id"
+	if [[ -f /usr/libexec/openssh/sftp-server ]]; then
+		# allow sftp on Centos 6 & 7
+		FORCED_COMMANDS="$FORCED_COMMANDS /usr/libexec/openssh/sftp-server"
+	fi
+
+	echo $* $FORCED_COMMANDS > $PRISON_ROOT/$jailName/.commands
 }
 
 # Add a new jail.
