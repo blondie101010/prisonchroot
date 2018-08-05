@@ -231,7 +231,7 @@ jail_update_user() {	# $1:jailName, $2:userName
 	cat $PRISON_ROOT/$1/.template/etc/profile >> $PRISON_ROOT/$1/$2/etc/profile
 	echo ") 2> /dev/null" >> $PRISON_ROOT/$1/$2/etc/profile
 
-	echo "HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; cd $HOME; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
+	echo "HOME=/home/$2; export PS1='$2@$PRISON_HOSTNAME \w \$ '; cd \$HOME; if [[ -f /home/$2/.profile ]]; then source /home/$2/.profile; fi" >> $PRISON_ROOT/$1/$2/etc/profile
 }
 
 # Add a jailed system user.
