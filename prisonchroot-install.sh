@@ -70,8 +70,8 @@ else
 fi
 
 cp prisonchroot $USRLOCAL/bin
-cp prisonchroot.inc.sh b101010.inc.sh $USRLOCAL/lib/.
-chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh $USRLOCAL/lib/b101010.inc.sh
+cp prisonchroot.inc.sh $USRLOCAL/lib/.
+chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh
 
 # if present, force selinux to allow chroot
 setsebool -P ssh_chroot_full_access=1 2> /dev/null
