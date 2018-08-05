@@ -9,7 +9,12 @@
 # load system environment
 source /etc/profile
 
-source b101010.inc.sh
+# install b101010 utils
+wget https://github.com/blondie101010/b101010-shell-utils/archive/master.tar.gz
+tar -xzf master.tar.gz
+cp b101010-shell-utils-master/b101010* /usr/local/lib/.
+
+source /usr/local/lib/b101010-service.inc.sh
 
 validateRootPath() {	# $1:varName
 	_root=${!1}
@@ -26,10 +31,13 @@ validateRootPath() {	# $1:varName
 }
 
 saveConf() {	# $1:INIT_SYSTEM
-	INIT_SYSTEM=$1
 	echo "PRISON_ROOT=$PRISON_ROOT" > /etc/prisonchroot.conf
-	echo "INIT_SYSTEM=$INIT_SYSTEM" >> /etc/prisonchroot.conf
 	echo "PRISON_HOSTNAME=$PRISON_HOSTNAME" >> /etc/prisonchroot.conf
+
+	# also keep INIT config to avoid redetecting all the time
+	echo "INIT_SYSTEM=$INIT_SYSTEM" >> /etc/prisonchroot.conf
+	echo "INIT_DIR=$INIT_DIR" >> /etc/prisonchroot.conf
+	echo "INIT_ENABLE=$INIT_ENABLE" >> /etc/prisonchroot.conf
 }
 
 # create our configuration based on user selection
@@ -68,54 +76,18 @@ chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh $USRLOCAL
 # if present, force selinux to allow chroot
 setsebool -P ssh_chroot_full_access=1 2> /dev/null
 
+initDetect
 
-# Detect whether to use rc-service, service, or systemctl to lauch us.
-# Though enable and install options could go in service(), that would facilitate errors.
-type rc-service > /dev/null 2>&1
+case "$INIT_SYSTEM" in
+	openrc) source=prisonchroot.openrc ;;
 
-if [[ $? == 0 ]]; then
-	saveConf openrc
+	systemd) source=prisonchroot.systemd ;;
 
-	cp prisonchroot.openrc /etc/init.d/prisonchroot
-	serviceControl start prisonchroot
-	rc-update add prisonchroot
-	exit 0
-fi
+	sysv|sysv-service) source=prisonchroot.sysv ;;
+esac
 
-type systemctl > /dev/null 2>&1
-
-if [[ $? == 0 ]]; then
-	saveConf systemd
-
-	cp prisonchroot.systemd /etc/systemd/system/prisonchroot.service
-	serviceControl start prisonchroot
-	systemctl enable prisonchroot
-	exit 0
-fi
-
-type service > /dev/null 2>&1
-if [[ $? == 0 ]]; then
-	saveConf sysv-service
-else
-	saveConf sysv
-fi
-
-# default init system (assuming sysv)
-
-cp prisonchroot.sysv /etc/init.d/prisonchroot
-
-type chkconfig > /dev/null 2>&1
-
-if [[ $? == 0 ]]; then
-	chkconfig prisonchroot on
-else
-	type update-rc.d > /dev/null 2>&1
-
-	if [[ $? == 0 ]]; then
-		update-rc.d prisonchroot defaults
-	else
-		ln -s /etc/init.d/prisonchroot /etc/defaults/prisonchroot
-	fi
-fi
-
+serviceControl install prisonchroot $source
+serviceControl enable prisonchroot
 serviceControl start prisonchroot
+
+saveConf
