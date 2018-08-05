@@ -246,7 +246,7 @@ user_add() {	# $1:userName, $2:jailName
 
 	mkdir -p $PRISON_ROOT/$2/$1/dev
 	chmod 755 $PRISON_ROOT/$2/$1/dev
-	jail_dev_user $1 $2 mount
+	jail_dev_user $2 $1 mount
 	mkdir -p $PRISON_ROOT/$2/$1/tmp
 	chmod 1777 $PRISON_ROOT/$2/$1/tmp
 	mkdir -p $PRISON_ROOT/$2/$1/home/$1
