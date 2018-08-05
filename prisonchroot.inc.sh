@@ -288,11 +288,11 @@ user_del() {	# $1:userName
 		error "User '$1' was not found in any jail."
 	fi
 
+	jail_dev_user $jail $1 umount
+
 	userdel $1
 
   	checkRet $? E
-
-	jail_dev_user $jail $1 umount
 
 	rm -rf $PRISON_ROOT/$jail/$1
 }
