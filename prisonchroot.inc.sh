@@ -73,6 +73,12 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	FILES="$FILES $LD_LINUX"
 	for file in $FILES
 	do
+		_dir=`dirname $file`
+
+		if [[ ! -d $PRISON_ROOT/$1/.template/$_dir ]]; then
+			mkdir $_dir
+		fi
+
 		cp $file $PRISON_ROOT/$1/.template$file
 	done
 
