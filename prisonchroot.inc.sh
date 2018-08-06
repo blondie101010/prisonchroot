@@ -97,14 +97,8 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 
 	cp -r /etc/terminfo $PRISON_ROOT/$1/.template/etc/.
 
-	# check for custom ulimit configuration
-	if [[ -f /etc/security/limits-$1.conf ]]; then
-		cp /etc/security/limits-$1.conf $PRISON_ROOT/$1/.template/etc/security/limits.conf
-	else
-		if [[ -d /etc/security ]]; then
-			# use default ulimit configuration
-			cp -r /etc/security $PRISON_ROOT/$1/.template/etc/.
-		fi
+	if [[ -d /etc/security ]]; then
+		cp -r /etc/security $PRISON_ROOT/$1/.template/etc/.
 	fi
 
 	# set host name
