@@ -47,6 +47,7 @@ jail_add() {	# $1:jailName, $2:allowedCommands
 # Update a jail and its users' environment.  It is used to update jailed environment after system updates or its initial creation.
 jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 	if [[ "$jailName" = "archive" ]]; then
+		# we do nothing in 'archive'
 		return
 	fi
 
@@ -191,6 +192,8 @@ jail_del() { # $1:jailName
 		error "Jail '$1' not found."
 	fi
 
+	jail_dev $1 umount
+
 	groupdel $1
 
   	checkRet $? E
@@ -258,6 +261,10 @@ user_add() {	# $1:userName, $2:jailName
 
 # Move a user from one jail to another.
 user_move() {	# $1:userName, $2:oldJail, $3:newJail
+	if [[ "$2" = "$3" ]]; then
+		error "Source and destination must be different."
+	fi
+
 	if [[ ! -d $PRISON_ROOT/$2/$1 ]]; then
 		error "User '$1' is not in jail '$2'."
 	fi
@@ -271,6 +278,15 @@ user_move() {	# $1:userName, $2:oldJail, $3:newJail
   	checkRet $? E
 
 	mv $PRISON_ROOT/$2/$1 $PRISON_ROOT/$3/$1 
+
+	if [[ "$2" = "archive" ]]; then
+		jail_dev_user $3 $1 mount
+	else
+		if [[ "$3" = "archive" ]]; then
+			jail_dev_user $3 $1 umount
+		fi
+	fi
+
 	jail_update_user $3 $1
 }
 
