@@ -1,0 +1,21 @@
+
+module prisonchroot 1.0;
+
+require {
+        type user_devpts_t;
+        type chkpwd_t;
+        type default_t;
+        type sshd_t;
+        type chroot_user_t;
+        class chr_file open;
+        class process { siginh noatsecure rlimitinh };
+        class file execute;
+}
+
+#============= chroot_user_t ==============
+allow chroot_user_t user_devpts_t:chr_file open;
+allow chroot_user_t default_t:file execute;
+
+#============= sshd_t ==============
+allow sshd_t chkpwd_t:process { siginh rlimitinh noatsecure };
+
