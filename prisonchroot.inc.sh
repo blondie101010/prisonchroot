@@ -267,7 +267,7 @@ user_move() {	# $1:userName, $2:oldJail, $3:newJail
 		error "Destination jail '$3' doesn't exist."
 	fi
 
-	usermod -G $3 -d $PRISON_ROOT/$3/$1 $1 2>/dev/null
+	usermod -G $3 -d $PRISON_ROOT/$3/$1 $1
 
   	checkRet $? E
 
