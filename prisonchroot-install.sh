@@ -74,7 +74,14 @@ cp prisonchroot.inc.sh $USRLOCAL/lib/.
 chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh
 
 # if present, force selinux to allow chroot
-setsebool -P ssh_chroot_full_access=1 2> /dev/null
+if (type sestatus 2>/dev/null) && (sestatus|grep -v disabled >/dev/null); then
+	setsebool -P ssh_chroot_full_access=1 2> /dev/null
+	semodule -r prisonchroot
+	checkmodule -M -m -o prisonchroot.mod prisonchroot.te
+	semodule_package -o prisonchroot.pp -m prisonchroot.mod
+	semodule -i prisonchroot.pp
+fi
+
 
 initDetect
 
