@@ -146,10 +146,10 @@ jail_dev_user() {	# $1:jailName, $2:username, $3:[mount|umount]
 	umount $PRISON_ROOT/$1/$2/dev/pts 2> /dev/null
 	umount $PRISON_ROOT/$1/$2/dev 2> /dev/null
 
-	mount|grep "$2"
+	mount|grep "$2" 2> /dev/null
 	if [[ $? = 0 ]]; then
 		# we must kill the session
-		_pid=`lsof $PRISON_ROOT/$1/$2/dev/pts|grep "/$2/"|head -1| cut -c9-|cut -d' ' -f1`
+		_pid=`lsof $PRISON_ROOT/$1/$2/dev/pts|grep "/$2/"|head -1| awk '{print $2}'`
 
 		if [[ $PRISONCHROOT_DEBUG = 1 ]]; then
 			echo "killing session with pid: $_pid"
