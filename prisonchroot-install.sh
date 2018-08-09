@@ -83,6 +83,12 @@ if (type sestatus 2>/dev/null) && (sestatus|grep -v disabled >/dev/null); then
 fi
 
 
+# make sure sshd uses its internal sftp server (more secure)
+cp -n /etc/ssh/sshd_config /etc/ssh/sshd_config.prisonchroot.bak
+sed -i "/^Subsystem\ssftp/d" /etc/ssh/sshd_config
+echo -e "\nSubsystem sftp internal-sftp\n" >> /etc/ssh/sshd_config
+
+
 initDetect
 
 case "$INIT_SYSTEM" in
