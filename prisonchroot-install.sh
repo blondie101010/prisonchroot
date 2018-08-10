@@ -18,8 +18,7 @@ tar -xzf master.tar.gz
 cd prisonchroot-master 
 
 # install b101010 utils
-bash <(curl -L -Ss https://raw.githubusercontent.com/blondie101010/b101010-shell-utils/master/instal
-l.sh)
+bash <(curl -L -Ss https://raw.githubusercontent.com/blondie101010/b101010-shell-utils/master/install.sh)
 
 source /usr/local/lib/b101010-system.inc.sh
 
