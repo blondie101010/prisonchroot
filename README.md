@@ -26,15 +26,10 @@ The only absolute minimum requirement is the presence of `/bin/bash`.
 
 ## Installation
 
-We provide two alternative installation methods depending on whether you have `wget` or `git` installed.
+`prisonchroot` can be installed by running the following command:
 
-### Installation with `wget`
+	bash <(curl -L -Ss https://raw.githubusercontent.com/blondie101010/prisonchroot/master/prisonchroot-install.sh)
 
-    cd /tmp; mkdir prisonchroot; cd prisonchroot; wget https://github.com/blondie101010/prisonchroot/archive/master.tar.gz && tar -xzf master.tar.gz && cd prisonchroot-master && ./prisonchroot-install.sh && rm -rf /tmp/prisonchroot; cd ~
-
-### Installation with `git`
-
-    cd /tmp; git clone https://github.com/blondie101010/prisonchroot && cd prisonchroot && ./prisonchroot-install.sh && rm -rf /tmp/prisonchroot; cd ~
 
 ### Stream-lining the installation
 
