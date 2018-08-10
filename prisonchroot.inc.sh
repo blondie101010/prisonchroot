@@ -73,7 +73,7 @@ jail_update() {	# $1:jailName, $2:allowedCommands (optional)
 		_dir=`dirname $file`
 
 		if [[ ! -d $PRISON_ROOT/$1/.template/$_dir ]]; then
-			mkdir $_dir
+			mkdir $PRISON_ROOT/$1/.template/$_dir
 		fi
 
 		cp $file $PRISON_ROOT/$1/.template$file
