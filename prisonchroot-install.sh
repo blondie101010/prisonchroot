@@ -10,11 +10,10 @@
 source /etc/profile
 
 # install b101010 utils
-wget https://github.com/blondie101010/b101010-shell-utils/archive/master.tar.gz
-tar -xzf master.tar.gz
-cp b101010-shell-utils-master/b101010* /usr/local/lib/.
+bash <(curl -L -Ss https://raw.githubusercontent.com/blondie101010/b101010-shell-utils/master/instal
+l.sh)
 
-source /usr/local/lib/b101010-service.inc.sh
+source /usr/local/lib/b101010-system.inc.sh
 
 validateRootPath() {	# $1:varName
 	_root=${!1}
