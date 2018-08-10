@@ -3,6 +3,7 @@
 source /etc/prisonchroot.conf
 
 source /usr/local/lib/b101010.inc.sh
+source /usr/local/lib/b101010-system.inc.sh
 
 # Save the jails allowed commands.
 jail_save_commands() {	#$1:jailName, $2-*:space delimited list of commands
