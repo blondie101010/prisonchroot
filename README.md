@@ -40,12 +40,11 @@ The installation script will not prompt you for acceptable parameters that are p
 	PRISON_ROOT	/prisons	must not exist and has to be writable
 	PRISON_HOSTNAME	real hostname	must not be blank
 
-## Configuration files
+## Configuration file
 
-`prisonchroot` uses only a few configuration files (other than imported system-wide configurations):
+`prisonchroot` has a single configuration file (other than imported system-wide configurations):
 
-- `/etc/prisonchroot.conf`: defined automatically during the installation
-- `/etc/security/limits-$jailName.conf`: if such a file exists when the jail (corresponding to $jailName) gets created or updated, this file is copied to the `chroot`ed environment's `/etc/security/limits.conf`
+	- `/etc/prisonchroot.conf`: defined automatically during the installation and should not be modified manually
 
 ## Syntax
 
