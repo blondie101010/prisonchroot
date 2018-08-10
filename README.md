@@ -44,7 +44,7 @@ The installation script will not prompt you for acceptable parameters that are p
 
 `prisonchroot` has a single configuration file (other than imported system-wide configurations):
 
-	- `/etc/prisonchroot.conf`: defined automatically during the installation and should not be modified manually
+- `/etc/prisonchroot.conf`: defined automatically during the installation and should not be modified manually
 
 ## Syntax
 
