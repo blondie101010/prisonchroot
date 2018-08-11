@@ -105,10 +105,10 @@ case "$INIT_SYSTEM" in
 	sysv|sysv-service) source=prisonchroot.sysv ;;
 esac
 
+saveConf
+
 serviceControl install prisonchroot $source
 serviceControl enable prisonchroot
 serviceControl start prisonchroot
-
-saveConf
 
 rm -rf /tmp/prisonchroot
