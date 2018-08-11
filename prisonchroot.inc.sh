@@ -230,7 +230,6 @@ jail_update_user() {	# $1:jailName, $2:userName
 
 	mkdir -p $PRISON_ROOT/$1/$2/prisons/$1
 	ln -s /home/$2 $PRISON_ROOT/$1/$2/prisons/$1/$2
-	chown $2:$2 $PRISON_ROOT/$1/$2/prisons/$1/$2
 
 	# wrap the whole chroot /etc/profile in an stderr redirect
 	echo "(" > $PRISON_ROOT/$1/$2/etc/profile
