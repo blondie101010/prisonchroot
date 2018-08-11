@@ -194,7 +194,7 @@ jail_del() { # $1:jailName
 	# move users to archive
 	mkdir -p $PRISON_ROOT/archive
 	rm -rf $PRISON_ROOT/$1/*/{etc,lib,lib64,usr,proc,bin,share}
-	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/.
+	mv $PRISON_ROOT/$1/* $PRISON_ROOT/archive/. 2>/dev/null
 	rmdir $PRISON_ROOT/$1
 
 	warn "Jail removal successful.  Note that the 'Match' conditions in /etc/ssh/sshd_config do not get removed automatically for safety reasons."
