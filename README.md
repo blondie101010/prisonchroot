@@ -11,18 +11,21 @@ It contains the following features:
 - low storage requirements by hard-linking files to a template
 - installation supports classic sysv, open-rc, and systemd init systems
 - support any number of jails
-- allows per jail `ulimit` configuration
 - create a jailed user in a single easy step
 - users can be moved from one jail to another
 - jail command lists can be easily updated
 - no deamon is used; the startup script is only to do the /dev bind-mount
 - changes are live; no need to close the session
+- support for selinux when active
 
 ## System requirements
 
 Although the included scripts are very generic, their testing on various systems is still ongoing.
 
 The only absolute minimum requirement is the presence of `/bin/bash`.
+
+> Note that `/etc/ssh/ssh_config` must not include any `Match` instruction before the installation.  Once the installation is complete, you are free to add and remove your own condition blocks.
+> The `prisonchroot` installer first takes a backup of your initial configuration file in `/etc/ssh/sshd_config.prisonchroot.bak`.
 
 ## Installation
 
@@ -101,6 +104,13 @@ Users from that jail are moved to the 'archive' jail which is only usable for sf
 
 ## Status
 
-This project is currently in testing phase.  It is not recommended to use it on production yet, but everyone is encouraged to test it out and send us any issues and suggestions you find.
+This project is currently in beta testing phase.  It is still not recommended to use it on production, but is has been quite extensively tested on the following setups:
 
-So far it has a 100% test rate on Gentoo and CentOS 7, and minor issues on CentOS 6.
+	System	Version	with selinux	without selinux
+	_______	_______	_______________ _______________
+	Gentoo 	current	not tested	pass
+	CentOS	6	pass		pass
+	CentOS	7	not tested	pass
+	Ubuntu	14.04	not tested	pass
+
+Please submit any issues and suggestions you may come up with on GitHub.
