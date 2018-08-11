@@ -65,19 +65,9 @@ mkdir -p $PRISON_ROOT/archive
 chown root:root $PRISON_ROOT
 chmod 755 $PRISON_ROOT
 
-if [[ ! -d /usr/local ]]; then
-	USRLOCAL=/usr
-	sed -i "s|/usr/local|/usr|g" prisonchroot
-	sed -i "s|/usr/local|/usr|g" prisonchroot.openrc
-	sed -i "s|/usr/local|/usr|g" prisonchroot.systemd
-	sed -i "s|/usr/local|/usr|g" prisonchroot.sysv
-else
-	USRLOCAL=/usr/local
-fi
-
-cp prisonchroot $USRLOCAL/bin
-cp prisonchroot.inc.sh $USRLOCAL/lib/.
-chmod 700 $USRLOCAL/bin/prisonchroot $USRLOCAL/lib/prisonchroot.inc.sh
+cp prisonchroot /usr/local/bin
+cp prisonchroot.inc.sh /usr/local/lib/.
+chmod 700 /usr/local/bin/prisonchroot /usr/local/lib/prisonchroot.inc.sh
 
 # if present, force selinux to allow chroot
 if (type sestatus >/dev/null 2>&1) && (sestatus|grep -v disabled >/dev/null); then
