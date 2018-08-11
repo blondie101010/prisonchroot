@@ -2,6 +2,17 @@
 #
 # chkconfig: 345 99 1
 # description: Starts and stops the prisonchroot bind-mounts
+#
+### BEGIN INIT INFO
+# Provides:          prisonchroot
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: prisonchroot control
+# Description:       Starts and stops the prisonchroot bind-mounts.
+### END INIT INFO
+
 
 
 source /etc/prisonchroot.conf
