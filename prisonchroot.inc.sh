@@ -220,6 +220,11 @@ jail_update_user() {	# $1:jailName, $2:userName
 		ln $PRISON_ROOT/$1/$2/usr/bin/bash $PRISON_ROOT/$1/$2/bin/bash
 	fi
 
+	# symlink sh if applicable
+	if [[ ! -f $PRISON_ROOT/$1/.template/bin/sh ]]; then
+		ln -s /bin/bash $PRISON_ROOT/$1/$2/bin/sh
+	fi
+
 	# wrap the whole chroot /etc/profile in an stderr redirect
 	echo "(" > $PRISON_ROOT/$1/$2/etc/profile
 	cat $PRISON_ROOT/$1/.template/etc/profile >> $PRISON_ROOT/$1/$2/etc/profile
