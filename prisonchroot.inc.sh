@@ -225,6 +225,9 @@ jail_update_user() {	# $1:jailName, $2:userName
 		ln -s /bin/bash $PRISON_ROOT/$1/$2/bin/sh
 	fi
 
+	# populate /etc/passwd file
+	grep $2 /etc/passwd|sed "s|prisons/$1|home|" > $PRISON_ROOT/$1/$2/etc/passwd
+
 	# wrap the whole chroot /etc/profile in an stderr redirect
 	echo "(" > $PRISON_ROOT/$1/$2/etc/profile
 	cat $PRISON_ROOT/$1/.template/etc/profile >> $PRISON_ROOT/$1/$2/etc/profile
@@ -239,7 +242,7 @@ user_add() {	# $1:userName, $2:jailName
 		error "Destination jail '$2' doesn't exist."
 	fi
 
-	useradd -r -G $2 -d $PRISON_ROOT/$2/$1 $1
+	useradd -r -G $2 -s /bin/bash -d $PRISON_ROOT/$2/$1 $1
 
   	checkRet $? E
 
