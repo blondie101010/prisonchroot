@@ -228,7 +228,7 @@ jail_update_user() {	# $1:jailName, $2:userName
 	# populate /etc/passwd file
 	grep $2 /etc/passwd|sed "s|prisons/$1|home|" > $PRISON_ROOT/$1/$2/etc/passwd
 
-	mkdir -p $PRISON_ROOT/$1/$2/prisons/$1/$2
+	ln -s /home/$2 $PRISON_ROOT/$1/$2/prisons/$1/$2
 	chown $2:$2 $PRISON_ROOT/$1/$2/prisons/$1/$2
 
 	# wrap the whole chroot /etc/profile in an stderr redirect
