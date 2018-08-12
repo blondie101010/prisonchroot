@@ -115,7 +115,7 @@ This project is currently in beta testing phase.  It is still not recommended to
 	Ubuntu	16.04	not tested	pass
 	Debian	7	not tested	pass
 	Debian	8	not tested      pass
-	Fedora	25	not tested	-
+	Fedora	25	not tested	pass
 
 Our current suggestion is to run through a series of tests on the target server before you implement it for real users.  The provide examples combined with proper testing of the jailed environment should allow you to properly evaluate the `prisonchroot` functionality on your specific system.
 
