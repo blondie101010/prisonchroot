@@ -15,7 +15,7 @@ It contains the following features:
 - users can be moved from one jail to another
 - jail command lists can be easily updated
 - no deamon is used; the startup script is only to do the /dev bind-mount
-- changes are live; no need to close the session
+- changes are live without needing to close the session;  some systems allow the session to remain active even when the user is deleted or archived, but they have access to nothing
 - support for selinux when active
 
 ## System requirements
@@ -104,7 +104,7 @@ Users from that jail are moved to the 'archive' jail which is only usable for sf
 
 ## Status
 
-This project is currently in beta testing phase.  It is still not recommended to use it on production, but is has been quite extensively tested on the following setups:
+This project is currently in beta testing phase.  It is still not recommended to use it on production, but it has been quite extensively tested on the following setups:
 
 	System	Version	with selinux	without selinux
 	_______	_______	_______________ _______________
@@ -112,5 +112,12 @@ This project is currently in beta testing phase.  It is still not recommended to
 	CentOS	6	pass		pass
 	CentOS	7	not tested	pass
 	Ubuntu	14.04	not tested	pass
+	Ubuntu	16.04	not tested	pass
+	Debian	7	not tested	pass
+	Debian	8	not tested      pass
+	Fedora	25	not tested	-
+
+Our current suggestion is to run through a series of tests on the target server before you implement it for real users.  The provide examples combined with proper testing of the jailed environment should allow you to properly evaluate the `prisonchroot` functionality on your specific system.
 
 Please submit any issues and suggestions you may come up with on GitHub.
+
